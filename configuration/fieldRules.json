@@ -1,0 +1,486 @@
+{
+    "tables": {
+        "user": {
+            "fields": {
+                "FullName": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "Username": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50
+                },
+                "Phone": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 13,
+                    "unique": true,
+                    "required": true
+                },
+                "Email": {
+                    "type": "string",
+                    "format": "email",
+                    "unique": true,
+                    "required": true
+                },
+                "Role": {
+                    "type": "choice",
+                    "minLengthtype": "string",
+                    "allowedValues": ["personal", "company", "admin", "bank"],
+                    "required": true
+                },
+                "Status": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50
+                }
+            }
+        },
+        "personal": {
+            "fields": {
+                "user_id": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": true
+                },
+                "tin": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "age": {
+                    "type": "number",
+                    "minValue": 0,
+                    "required": true
+                },
+                "education": {
+                    "type": "choice",
+                    "allowedValues": ["bellow_hs", "highSchool", "diploma", "bachelors", "masters", "phd"],
+                    "required": true
+                  },
+                "marital_status": {  
+                    "type": "choice",
+                    "allowedValues": ["married", "unmarried"],
+                    "required": true
+                },
+                "dependants": {
+                    "type": "number",
+                    "minValue": 0,
+                    "required": true
+                },
+                "criminal": {
+                    "type": "choice",
+                    "allowedValues": ["no", "past_5_years", "more_than_5"],
+                    "required": true
+                }
+            },
+            "keys": [
+                {
+                    "table": "user",
+                    "column": "user_id"
+                } 
+            ]
+        },
+        "loan": {
+            "fields": {
+                "user_id": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": true
+                },
+                "company_id": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": false
+                },
+                "bank": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": true
+                },
+                "loan_amount": {
+                    "type": "number",
+                    "minValue": 0,
+                    "required": true
+                },
+                "loan_reason": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 258,
+                    "required": true
+                },
+                "repayment_period": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "collateral_type": {
+                    "type": "string",
+                    "minValue": 0,
+                    "required": true
+                },
+                "job_status": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "business_plan_id": {
+                    "type": "number",
+                    "minValue": 0
+                },
+                "status": {
+                    "type": "choice",
+                    "allowedValues": ["requested", "approved", "rejected", "received", "repaid"],
+                    "required": false
+                },
+                "score": {
+                    "type": "number"
+                }
+            },
+            "keys": [
+              {
+                "table": "user",
+                "column": "user_id"
+              },
+              {
+                "table": "bank",
+                "column": "bank"
+              },
+              {
+                "table": "businessplan",
+                "column": "business_plan_id"
+              }   
+            ]
+        },
+        "economic": {
+            "fields": {
+                "user_id": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": true
+                },
+                "field_of_employment": {
+                    "type": "string",
+                    "minLength": 1,
+                    "required": true
+                },
+                "experience": {
+                    "type": "number",
+                    "minValue": 0,
+                    "required": true
+                },
+                "source_of_income": {
+                    "type": "number",
+                    "minLength": 0,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "current_loans": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": false
+                },
+                "repaid_loans": {
+                    "type": "number",
+                    "minValue": 0,
+                    "required": false
+                },
+                "dti": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "assets": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 258,
+                    "required": true
+                },
+                "score": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50
+                }
+            },
+           "keys": [
+                { 
+                   "table": "user",
+                   "column": "user_id"
+                }
+           ] 
+        },
+        "companyeconomic": {
+            "fields": {
+                "user_id": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": true
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "required": true
+                },
+                "employee_count": {
+                    "type": "number",
+                    "minValue": 1,
+                    "required": true
+                },
+                "company_age": {
+                    "type": "number",
+                    "minLength": 0,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "current_loans": {
+                    "type": "number",
+                    "minLength": 0,
+                    "maxLength": 50,
+                    "required": false    
+                },
+                "repaid_loans": {
+                    "type": "number",
+                    "minValue": 0,
+                    "required": false
+                },
+                "idr": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "fccr": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "assets": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 258,
+                    "required": true
+                },
+                "score": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50
+                }
+            },
+            "keys": [
+                { 
+                   "table": "user",
+                   "column": "user_id"
+                }
+           ]
+        },
+        "company": {
+            "fields": {
+                "user_id": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": true
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "required": true
+                },
+                "legal_status": {
+                    "type": "string",
+                    "minValue": 0,
+                    "required": true
+                },
+                "tin": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "sector": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "score": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50
+                }
+            },
+            "keys": [
+                { 
+                   "table": "user",
+                   "column": "user_id"
+                }
+           ]
+        },
+        "businessplan": {
+            "fields": {
+                "sector": {
+                    "type": "string",
+                    "minLength": 2,
+                    "required": true
+                },
+                "sub_sector": {
+                    "type": "string",
+                    "minLength": 1,
+                    "required": true
+                },
+                "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 258,
+                    "required": true
+                },
+                "opportunity_created": {
+                    "type": "number",
+                    "minLength": 1,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "total_income": {
+                    "type": "number",
+                    "minValue": 0,
+                    "required": true
+                },
+                "current_stage": {
+                    "type": "choice",
+                    "allowedValues": ["ideation", "revenue", "post_revenue"],
+                    "required": true
+                },
+                "stimated_cost": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "business_groups": {
+                    "type": "number",
+                    "minLength": 0,
+                    "maxLength": 50,
+                    "required": false
+                },
+                "monthly_revenue": {
+                    "type": "number",
+                    "minLength": 1,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "user_id": {
+                    "type": "number",
+                    "minLength": 1,
+                    "maxLength": 50,
+                    "required": true
+                },
+                "company_id": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": false
+                },
+                "score": {
+                    "type": "number",
+                    "minLength": 2,
+                    "maxLength": 50
+                }
+            }
+        },    
+        "bank": {
+            "fields": {
+                "user_id": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": true
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "required": true
+                },
+                "logoColor": {
+                    "type": "string",
+                    "minLength": 3,
+                    "required": true
+                },
+                "image": {
+                    "type": "number",
+                    "minValue": 0,
+                    "required": true
+                } 
+            },
+            "keys": [
+                { 
+                   "table": "user",
+                   "column": "user_id"
+                }
+            ]
+        },
+        "product": {
+            "fields": {
+                "short_description": {
+                    "type": "text",
+                    "minLength": 10,
+                    "required": true
+                },
+                "description": {
+                    "type": "string",
+                    "minLength": 10,
+                    "required": true
+                },
+                "price": {
+                    "type": "number",
+                    "minLength": 1,
+                    "required": true
+                },
+                "image": {
+                    "type": "number",
+                    "minValue": 0,
+                    "required": false
+                } 
+            },
+            "keys": [
+            ]
+        },
+        "attachment": {
+            "fields": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "required":true
+                },
+                "table": {
+                    "type": "string",
+                    "minLength": 1,
+                    "required":true
+                },
+                "record": {
+                    "type": "string",
+                    "minValue": 1
+                },
+                "file_name": {
+                    "type": "string",
+                    "minValue": 5
+                },
+                "extension": {
+                    "type": "string",
+                    "minValue": 1
+                }
+             }
+        }
+    }
+}

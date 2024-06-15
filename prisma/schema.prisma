@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model bank {
+  id                   Int    @id @default(autoincrement())
+  user_id              Int
+  name                 String @db.VarChar(258)
+  logoColor            String @db.VarChar(10)
+  image                Int
+  user                 user   @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "userId")
+  loan_loan_bankTobank loan[] @relation("loan_bankTobank")
+
+  @@index([user_id], map: "userId")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model businessplan {
+  id                  Int      @id @default(autoincrement())
+  sector              String   @db.VarChar(258)
+  sub_sector          String   @db.VarChar(258)
+  description         String   @db.VarChar(5000)
+  opportunity_created Int
+  total_income        Float
+  current_stage       String   @db.VarChar(258)
+  stimated_cost       Float
+  business_groups     Int?
+  monthly_revenue     Float
+  user_id             Int
+  company_id          Int?
+  score               Int?
+  user                user     @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "user_idbusinessplan")
+  company             company?     @relation(fields: [company_id], references: [id], onUpdate: Restrict, map: "company_idbusinessplan")
+
+  @@index([user_id], map: "user_id")
+  
+}
+
+model company {
+  id           Int    @id @default(autoincrement())
+  user_id      Int
+  name         String
+  legal_status String @db.VarChar(258)
+  tin          String @db.VarChar(258)
+  sector       String @db.VarChar(258)
+  user         user   @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "user_idff")
+  score        Int?
+  companyeconomic companyeconomic[]
+  loan            loan[]
+  businessplan    businessplan[]
+
+  @@index([user_id], map: "user_id")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model companyeconomic {
+  id             Int    @id @default(autoincrement())
+  user_id        Int
+  name           String @db.VarChar(258)
+  employee_count Int
+  company_age    Int
+  current_loans  Int
+  repaid_loans   Int
+  idr            Float
+  fccr           Float
+  assets         String @db.VarChar(258)
+  score          Int?
+  company        company   @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "user_idss")
+
+  @@index([user_id], map: "user_id")
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model economic {
+  id                  Int    @id @default(autoincrement())
+  user_id             Int
+  field_of_employment String @db.VarChar(258)
+  experience          Int
+  source_of_income    Int
+  current_loans       Int
+  repaid_loans        Int
+  dti                 Float
+  score               Int?
+  assets              String @db.VarChar(258)
+  user                user   @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "user_ideconomic")
+
+  @@index([user_id], map: "user_id")
+}
+
+model loan {
+  id                   Int    @id @default(autoincrement())
+  user_id              Int
+  company_id           Int?
+  bank                 Int
+  loan_amount          Float
+  loan_reason          String @db.VarChar(1000)
+  repayment_period     Int
+  collateral_type      String @db.VarChar(258)
+  job_status           String @db.VarChar(258)
+  business_plan_id     Int?
+  score                Int? 
+  status               String @db.VarChar(10)
+
+  bank_loan_bankTobank bank   @relation("loan_bankTobank", fields: [bank], references: [id], onUpdate: Restrict, map: "bank")
+  user                 user   @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "userIda")
+  company              company?   @relation(fields: [company_id], references: [id], onUpdate: Restrict, map: "companyIda")
+  
+  @@index([bank], map: "bank")
+  @@index([user_id], map: "userIda")
+
+}
+
+model personal {
+  id             Int      @id @default(autoincrement())
+  user_id        Int
+  tin            String   @db.VarChar(258)
+  age            Int?
+  education      String?  @db.VarChar(258)
+  marital_status String?  @db.VarChar(258)
+  dependants     Int
+  criminal       String
+  score          Int
+  user           user     @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "userIds")
+
+  @@index([user_id], map: "userIds")
+}
+
+model user {
+  id              Int               @id @default(autoincrement())
+  FullName        String            @db.VarChar(258)
+  Username        String?            @db.VarChar(258)
+  Phone           String            @db.VarChar(258)
+  Email           String            @db.VarChar(258)
+  Role            String            @db.VarChar(258)
+  Status          String            @db.VarChar(258)
+  Password        String?            @db.VarChar(258)
+  bank            bank[]
+  businessplan    businessplan[]
+  company         company[]
+  loan            loan[]
+  personal        personal[]
+  economic        economic[]
+}
+
+model attachment {
+  id       Int       @id @default(autoincrement())
+  name String?
+  table String?
+  record     String?
+  file_name     String    @db.VarChar(100)
+  extension     String
+}
+
+model product {
+  id       Int       @id @default(autoincrement())
+  short_description String?  @db.VarChar(100)
+  description String     @db.VarChar(1000)
+  price     Float    
+  image     Int?    
+}
